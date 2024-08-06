@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
+import { UberAdapter } from './adapters/uber.adapter';
+import { BoltAdapter } from './adapters/bolt.adapter';
 
 @Module({
-  imports: [],
+  providers: [UberAdapter, BoltAdapter],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}
+
+
