@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, InternalServerErrorException } from '@nestjs/common';
 import { RideService } from '../services/ride.service';
 import { RideOffer } from '../models/ride.model';
 
@@ -11,24 +11,22 @@ export class RideController {
     @Query('provider') provider?: string,
     @Query('carType') carType?: string,
   ): Promise<RideOffer[]> {
-    console.log('Query parameters received:', { provider, carType });
+    try {
+      if (provider && carType) {
+        return await this.rideService.getBestOfferByProviderAndType(provider, carType);
+      }
 
-    if (provider && carType) {
-      console.log('Fetching offers by provider and car type');
-      return this.rideService.getBestOfferByProviderAndType(provider, carType);
+      if (provider) {
+        return await this.rideService.getBestOfferByProvider(provider);
+      }
+
+      if (carType) {
+        return await this.rideService.getBestOfferByType(carType);
+      }
+
+      return await this.rideService.getBestOffersAll();
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to get best rides');
     }
-
-    if (provider) {
-      console.log('Fetching offers by provider');
-      return this.rideService.getBestOfferByProvider(provider);
-    }
-
-    if (carType) {
-      console.log('Fetching offers by car type');
-      return this.rideService.getBestOfferByType(carType);
-    }
-
-    console.log('Fetching all offers');
-    return this.rideService.getBestOffersAll();
   }
 }

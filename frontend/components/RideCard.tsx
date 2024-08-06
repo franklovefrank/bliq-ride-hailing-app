@@ -1,9 +1,8 @@
-// components/RideCard.tsx
 import React from 'react';
 import { Card, CardMedia, Box, Typography, Chip } from '@mui/material';
 import InfoRounded from '@mui/icons-material/InfoRounded';
 import { useTheme } from '@mui/material/styles';
-import { RideOffer } from '../../backend/src/models/ride.model';
+import { RideOffer } from '../models/ride.model';
 
 interface RideCardProps {
     ride: RideOffer;
@@ -26,7 +25,7 @@ const RideCard: React.FC<RideCardProps> = ({ ride, isFastest, isSelected, onClic
                 zIndex: 1,
                 backgroundColor: theme.palette.background.paper,
                 borderColor: isSelected ? 'black' : theme.palette.divider,
-                borderWidth: isSelected ? 3 : 1, // Thicker border for selected card
+                borderWidth: isSelected ? 3 : 1,
                 cursor: 'pointer',
                 '&:hover': {
                     borderColor: 'black',
