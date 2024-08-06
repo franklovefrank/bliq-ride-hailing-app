@@ -20,7 +20,10 @@ export class RideService {
         bestOffers.set(key, offer);
       }
     });
-    return Array.from(bestOffers.values());
+  
+    const sortedOffers = Array.from(bestOffers.values()).sort((a, b) => a.price - b.price);
+  
+    return sortedOffers;
   }
   
   async getBestOffersAll(): Promise<RideOffer[]> {
