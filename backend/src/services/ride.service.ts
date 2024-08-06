@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { UberAdapter } from '../adapters/uber.adapter';
-import { BoltAdapter } from '../adapters/bolt.adapter';
 import { RideOffer } from '../models/ride.model';
+import { UberAdapter } from 'src/adapters/uber.adapter';
+import { BoltAdapter } from 'src/adapters/bolt.adapter';
 
 @Injectable()
 export class RideService {
@@ -10,48 +10,36 @@ export class RideService {
     private readonly boltAdapter: BoltAdapter,
   ) {}
 
-  private getBestOffers(offers: RideOffer[]): RideOffer[] {
-    const bestOffers = new Map<string, RideOffer>();
+  private async fetchAllOffers(): Promise<RideOffer[]> {
+    const [uberOffers, boltOffers] = await Promise.all([
+      this.uberAdapter.fetchOffers(),
+      this.boltAdapter.fetchOffers(),
+    ]);
   
-    offers.forEach(offer => {
-      const key = `${offer.provider}-${offer.carType}`;
+    const combinedOffers = [...uberOffers, ...boltOffers];
+      combinedOffers.sort((a, b) => a.price - b.price);
   
-      if (!bestOffers.has(key) || offer.price < bestOffers.get(key)!.price) {
-        bestOffers.set(key, offer);
-      }
-    });
-  
-    const sortedOffers = Array.from(bestOffers.values()).sort((a, b) => a.price - b.price);
-  
-    return sortedOffers;
+    return combinedOffers;
   }
   
   async getBestOffersAll(): Promise<RideOffer[]> {
-    const uberOffers = await this.uberAdapter.fetchOffers();
-    const boltOffers = await this.boltAdapter.fetchOffers();
-
-    const allOffers = [...uberOffers, ...boltOffers];
-    return this.getBestOffers(allOffers);
+    return this.fetchAllOffers();
   }
 
   async getBestOfferByProvider(provider: string): Promise<RideOffer[]> {
-    let offers: RideOffer[] = [];
-    
-    if (provider === 'uber') {
-      offers = await this.uberAdapter.fetchOffers();
-    } else if (provider === 'bolt') {
-      offers = await this.boltAdapter.fetchOffers();
-    }
-
-    return this.getBestOffers(offers);
+    const allOffers = await this.fetchAllOffers();
+    return allOffers.filter(offer => offer.provider === provider);
   }
 
   async getBestOfferByType(carType: string): Promise<RideOffer[]> {
-    const uberOffers = await this.uberAdapter.fetchOffers();
-    const boltOffers = await this.boltAdapter.fetchOffers();
+    const allOffers = await this.fetchAllOffers();
+    return allOffers.filter(offer => offer.carType === carType);
+  }
 
-    const allOffers = [...uberOffers, ...boltOffers];
-    const filteredOffers = allOffers.filter(offer => offer.carType === carType);
-    return this.getBestOffers(filteredOffers);
+  async getBestOfferByProviderAndType(provider: string, carType: string): Promise<RideOffer[]> {
+    const allOffers = await this.fetchAllOffers();
+    return allOffers.filter(
+      offer => offer.provider === provider && offer.carType === carType,
+    );
   }
 }

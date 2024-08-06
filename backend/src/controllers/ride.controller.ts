@@ -7,23 +7,28 @@ export class RideController {
   constructor(private readonly rideService: RideService) {}
 
   @Get('best-rides')
-  async getBestRides(): Promise<RideOffer[]> {
+  async getBestRides(
+    @Query('provider') provider?: string,
+    @Query('carType') carType?: string,
+  ): Promise<RideOffer[]> {
+    console.log('Query parameters received:', { provider, carType });
+
+    if (provider && carType) {
+      console.log('Fetching offers by provider and car type');
+      return this.rideService.getBestOfferByProviderAndType(provider, carType);
+    }
+
+    if (provider) {
+      console.log('Fetching offers by provider');
+      return this.rideService.getBestOfferByProvider(provider);
+    }
+
+    if (carType) {
+      console.log('Fetching offers by car type');
+      return this.rideService.getBestOfferByType(carType);
+    }
+
+    console.log('Fetching all offers');
     return this.rideService.getBestOffersAll();
-  }
-
-  @Get('best-rides-by-provider')
-  async getBestRidesByProvider(@Query('provider') provider: string): Promise<RideOffer[]> {
-    if (!provider) {
-      throw new Error('Provider query parameter is required');
-    }
-    return this.rideService.getBestOfferByProvider(provider);
-  }
-
-  @Get('best-rides-by-type')
-  async getBestRidesByType(@Query('carType') carType: string): Promise<RideOffer[]> {
-    if (!carType) {
-      throw new Error('CarType query parameter is required');
-    }
-    return this.rideService.getBestOfferByType(carType);
   }
 }
