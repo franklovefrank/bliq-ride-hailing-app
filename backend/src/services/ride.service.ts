@@ -10,15 +10,7 @@ export class RideService {
     private readonly boltAdapter: BoltAdapter,
   ) {}
 
-  async getBestOffers(): Promise<RideOffer[]> {
-    const uberOffers = await this.uberAdapter.fetchOffers();
-    const boltOffers = await this.boltAdapter.fetchOffers();
-
-    const allOffers = [...uberOffers, ...boltOffers];
-    return this.getBestOffersByProviderAndType(allOffers);
-  }
-
-  private getBestOffersByProviderAndType(offers: RideOffer[]): RideOffer[] {
+  private getBestOffers(offers: RideOffer[]): RideOffer[] {
     const bestOffers = new Map<string, RideOffer>();
   
     offers.forEach(offer => {
@@ -31,6 +23,14 @@ export class RideService {
     return Array.from(bestOffers.values());
   }
   
+  async getBestOffersAll(): Promise<RideOffer[]> {
+    const uberOffers = await this.uberAdapter.fetchOffers();
+    const boltOffers = await this.boltAdapter.fetchOffers();
+
+    const allOffers = [...uberOffers, ...boltOffers];
+    return this.getBestOffers(allOffers);
+  }
+
   async getBestOfferByProvider(provider: string): Promise<RideOffer[]> {
     let offers: RideOffer[] = [];
     
@@ -40,7 +40,7 @@ export class RideService {
       offers = await this.boltAdapter.fetchOffers();
     }
 
-    return this.getBestOffersByProviderAndType(offers);
+    return this.getBestOffers(offers);
   }
 
   async getBestOfferByType(carType: string): Promise<RideOffer[]> {
@@ -49,6 +49,6 @@ export class RideService {
 
     const allOffers = [...uberOffers, ...boltOffers];
     const filteredOffers = allOffers.filter(offer => offer.carType === carType);
-    return this.getBestOffersByProviderAndType(filteredOffers);
+    return this.getBestOffers(filteredOffers);
   }
 }

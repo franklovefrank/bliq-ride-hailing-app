@@ -8,7 +8,7 @@ export class RideController {
 
   @Get('best-rides')
   async getBestRides(): Promise<RideOffer[]> {
-    return this.rideService.getBestOffers();
+    return this.rideService.getBestOffersAll();
   }
 
   @Get('best-rides-by-provider')
