@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RideController } from './ride.controller';
 import { RideService } from '../services/ride.service';
 import { InternalServerErrorException } from '@nestjs/common';
-import { RideOffer } from '../models/ride.model';
+import { RideOffer } from '../models/response.model'; // Ensure this matches your RideOffer definition
 
 describe('RideController', () => {
   let controller: RideController;
@@ -59,7 +59,7 @@ describe('RideController', () => {
 
     it('should return best offers by car type', async () => {
       const mockOffers: RideOffer[] = [
-        { provider: 'Bolt', lowPrice: 15, highPrice: 25, duration: 10, carType: 'Luxury' },
+        { provider: 'Bolt', price: 20, duration: 10, carType: 'Luxury' }, // Update mock data
       ];
 
       jest.spyOn(service, 'getBestOfferByType').mockResolvedValue(mockOffers);
@@ -72,7 +72,7 @@ describe('RideController', () => {
     it('should return all best offers', async () => {
       const mockOffers: RideOffer[] = [
         { provider: 'Uber', price: 20, duration: 15, carType: 'Economy' },
-        { provider: 'Bolt', lowPrice: 15, highPrice: 25, duration: 10, carType: 'Luxury' },
+        { provider: 'Bolt', price: 20, duration: 10, carType: 'Luxury' }, // Update mock data
       ];
 
       jest.spyOn(service, 'getBestOffersAll').mockResolvedValue(mockOffers);

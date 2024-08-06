@@ -1,6 +1,6 @@
-export interface RideOffer {
+export interface UberOffer {
     provider: string;
-    price: number;       // standardized price model
+    price: number;    
     duration: number;     // Represented in minutes
     carType: string;
   }

@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { RideOffer } from '../models/ride.model';
+import { RideOffer } from '../models/response.model';
 import { normalizePrice } from '../utils/price.utils'
+import { BoltOffer } from 'src/models/bolt.model';
 
 @Injectable()
 export class BoltAdapter {
   async fetchOffers(): Promise<RideOffer[]> {
-    const boltOffers = [
+    const boltOffers: BoltOffer[] = [
       {
         provider: 'Bolt',
         lowPrice: 12,
@@ -78,9 +79,9 @@ export class BoltAdapter {
       },
     ];
 
-    return boltOffers.map(offer => ({
-      ...offer,
-      price: normalizePrice(offer.lowPrice, offer.highPrice),
+    return boltOffers.map(({ lowPrice, highPrice, ...rest }) => ({
+      ...rest,
+      price: normalizePrice(lowPrice, highPrice),
     }));
   }
 }

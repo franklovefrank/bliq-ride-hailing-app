@@ -1,6 +1,6 @@
 import { Controller, Get, Query, InternalServerErrorException } from '@nestjs/common';
 import { RideService } from '../services/ride.service';
-import { RideOffer } from '../models/ride.model';
+import { RideOffer } from '../models/response.model';
 
 @Controller('api')
 export class RideController {

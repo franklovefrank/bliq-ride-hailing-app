@@ -77,17 +77,13 @@ This will start the frontend on http://localhost:3000.
 ```
 export interface RideOffer {
     provider: string;      
-    price?: number;       
-    lowPrice?: number;    
-    highPrice?: number;   
+    price: number;       
     duration: number;     
     carType: string;     
-    fastest?: boolean;
 }
 ```
 - provider: The name of the ride provider.
-- price: The fixed price of the ride (if applicable).
-- lowPrice and highPrice: The range of prices for providers that use price ranges.
+- price: The price of the ride. This field is normalized to either be the average or  given price, depending on the provider
 - duration: The estimated duration of the ride in minutes.
 - carType: The type of car offered.
-- fastest: An optional boolean flag used to indicate if this offer is the fastest among the available options.
+

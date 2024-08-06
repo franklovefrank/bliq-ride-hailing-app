@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RideService } from './ride.service';
 import { UberAdapter } from '../adapters/uber.adapter';
 import { BoltAdapter } from '../adapters/bolt.adapter';
-import { RideOffer } from '../models/ride.model';
+import { RideOffer } from '../models/response.model'; // Ensure this matches your RideOffer definition
 
 describe('RideService', () => {
   let service: RideService;
@@ -43,7 +43,7 @@ describe('RideService', () => {
         { provider: 'Uber', price: 20, duration: 15, carType: 'Economy' },
       ];
       const mockBoltOffers: RideOffer[] = [
-        { provider: 'Bolt', lowPrice: 15, highPrice: 25, duration: 10, carType: 'Luxury' },
+        { provider: 'Bolt', price: 20, duration: 10, carType: 'Luxury' }, // Update mock data
       ];
 
       jest.spyOn(uberAdapter, 'fetchOffers').mockResolvedValue(mockUberOffers);
@@ -52,7 +52,7 @@ describe('RideService', () => {
       const result = await service['fetchAllOffers']();
       expect(result).toEqual([
         { provider: 'Uber', price: 20, duration: 15, carType: 'Economy' },
-        { provider: 'Bolt', lowPrice: 15, highPrice: 25, duration: 10, carType: 'Luxury' },
+        { provider: 'Bolt', price: 20, duration: 10, carType: 'Luxury' }, // Update expected result
       ]);
     });
 

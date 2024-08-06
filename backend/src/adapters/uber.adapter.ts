@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RideOffer } from '../models/ride.model';
+import { RideOffer } from '../models/response.model';
 
 @Injectable()
 export class UberAdapter {

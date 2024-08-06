@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { RideOffer } from '../models/ride.model';
+import { RideOffer } from '../models/response.model';
 import { UberAdapter } from 'src/adapters/uber.adapter';
 import { BoltAdapter } from 'src/adapters/bolt.adapter';
 
