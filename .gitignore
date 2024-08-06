@@ -60,3 +60,6 @@ backend/dist/
 backend/.cache/
 backend/.env
 backend/node_modules
+
+# frontend
+frontend/.next
