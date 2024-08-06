@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RideOffer } from '../models/ride.model';
-//import { normalizePrice } from '../utils/price.utils'
+import { normalizePrice } from '../utils/price.utils'
 
 @Injectable()
 export class BoltAdapter {
@@ -78,11 +78,9 @@ export class BoltAdapter {
       },
     ];
 
-    // // Normalize Bolt offers with price range
-    // return boltOffers.map(offer => ({
-    //   ...offer,
-    //   price: normalizePrice(offer.lowPrice, offer.highPrice),
-    // }));
-    return boltOffers;
+    return boltOffers.map(offer => ({
+      ...offer,
+      price: normalizePrice(offer.lowPrice, offer.highPrice),
+    }));
   }
 }
